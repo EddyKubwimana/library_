@@ -1,68 +1,168 @@
+/**
+ * Welcome to the Library Management System Project in Java!
+ *
+ * This project aims to develop a straightforward yet robust in-memory system for managing a library's catalogue. The system
+ * facilitates various operations such as adding books, checking them in and out, searching for books, and efficiently
+ * managing book availability. Leveraging key data structures, including hash tables, queues, and binary trees, we aim to
+ * deliver an organized and user-friendly environment for both library staff and patrons.
+ *
+ * **Project Collaborators:**
+ *
+ * - **Eddy Kubwimana
+ * - ** Clovis Mushagalusa Cirubakadhera
+ * - ** Cajetan Songwae
+ * - ** Muhammed Habib Soumahoro
+ * - *Email:* eddy.kubwimana@ashesi.edu.gh
+ * - *Email :
+ * - *Email :
+ * - *Email :
+ * 
+
+ *   - *GitHub:* https://github.com/EddyKubwimana/Book-catalogue-management
+ *
+ * - **UI/UX Designer:** Jane Smith
+ *   - *Email:* eddy.kubwimana@ashesi.edu.gh
+ *
+ * **Core Features and Design Choices:**
+ *
+ * 1. **Catalogue Management:**
+ *    - Utilizes a hash table for efficient management of the book catalogue, ensuring quick retrieval of book information.
+ *
+ * 2. **Checkout System:**
+ *    - Implements a queue system to handle book checkouts and returns in a first-come, first-served manner.
+ *
+ * 3. **Search Functionality:**
+ *    - Empowers users to search for books by title, author, or ISBN using efficient search algorithms for a seamless experience.
+ *
+ * 4. **Book Availability:**
+ *    - Utilizes a binary tree to keep track of available and checked-out books, ensuring efficient updates on book status.
+ *
+ * 5. **User Interface:**
+ *    - Provides a simple text-based Command Line Interface (CLI) for users to interact with the library management functionalities.
+ *
+ * **Expected Outcomes:**
+ *
+ * - Demonstrates the appropriate use of data structures for efficient book management and user interactions.
+ * - Handles book checkouts and availability updates in real-time, providing users with up-to-date information.
+ * - Provides comprehensive documentation explaining design choices and complexity analysis for the implemented features.
+ *
+ * We look forward to the successful development of this Library Management System, contributing to an organized and
+ * user-friendly environment for library patrons. For updates and contributions, please refer to the GitHub repository:
+ * https://github.com/EddyKubwimana/Book-catalogue-management
+ *
+ * Thank you for your collaboration and dedication to this project!
+ * 
+ */
+
+
+
+
+
 import java.util.*;
 
-class Book {
-    private String title; // book title
-    private String author; // book author
-    private String publication; // company of publication
-    private String synopsis; //
-    private String version; // edition (int + EDITION)
-    private String isbn;
-    private int edition;
-    private static final String EDITION = "Edition";
+public class Book {
 
-    public Book(String title, String author, String publication, String synopsis, String isbn, int edition) {
+    // Fields
+    private String title;        // Book title
+    private String author;       // Book author
+    private String publication;  // Company of publication
+    private String synopsis;     // Book synopsis
+    private String version;      // Edition information (e.g., 1st Edition)
+    private String isbn;         // International Standard Book Number
+    private int edition;         // Edition number
+
+    /**
+     * Constructs a new `Book` object with the specified attributes.
+     * 
+     * @param title       The title of the book.
+     * @param author      The author of the book.
+     * @param publication The company or entity responsible for publication.
+     * @param synopsis    A brief summary or description of the book.
+     * @param isbn        The International Standard Book Number of the book.
+     */
+    public Book(String title, String author, String publication, String synopsis, String isbn) {
         this.title = title;
         this.author = author;
         this.publication = publication;
         this.synopsis = synopsis;
         this.isbn = isbn;
-        this.edition = edition;
-        this.version = EDITION + edition;
     }
 
+    /**
+     * Retrieves the title of the book.
+     * 
+     * @return The title of the book.
+     */
     public String getTitle() {
         return title;
     }
 
-    public String getAuhor() {
+    /**
+     * Retrieves the author of the book.
+     * 
+     * @return The author of the book.
+     */
+    public String getAuthor() {
         return author;
     }
 
+    /**
+     * Retrieves the company of publication for the book.
+     * 
+     * @return The company of publication.
+     */
     public String getPublication() {
         return publication;
     }
 
+    /**
+     * Retrieves a brief summary or description of the book.
+     * 
+     * @return The synopsis of the book.
+     */
     public String getSynopsis() {
         return synopsis;
     }
 
+    /**
+     * Retrieves the version (edition) information of the book.
+     * 
+     * @return The version (edition) of the book.
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * Retrieves the International Standard Book Number (ISBN) of the book.
+     * 
+     * @return The ISBN of the book.
+     */
     public String getIsbn() {
         return isbn;
     }
 
+    /**
+     * Retrieves the edition number of the book.
+     * 
+     * @return The edition number of the book.
+     */
     public int getEdition() {
         return edition;
     }
 
-    public int numericValue() {
-
-        char[] name = getTitle().toLowerCase().toCharArray();
-        int asciisum = 0;
-
-        for (char letter : name) {
-            asciisum += (int) letter;
-        }
-        return asciisum;
+    /**
+     * Returns a string representation of the book.
+     * 
+     * @return A string containing the book title and author.
+     */
+    @Override
+    public String toString() {
+        return "Book Title: " + this.title + ", Author: " + this.author;
     }
 }
-
 class LibrarySystem {
-    private Book[] libraryEntries;
-    private Book[] authors;
+    
     private Queue<Book> borrowedBooks;
     private int libraryCapacity;
     private int booksInTheLibrary;
