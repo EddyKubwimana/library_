@@ -5,10 +5,8 @@ class Book {
     private String author; // book author
     private String publication; // company of publication
     private String synopsis; //
-    private String version; // edition (int + EDITION)
     private String isbn;
     private int edition;
-    private static final String EDITION = "Edition";
 
     public Book(String title, String author, String publication, String synopsis, String isbn, int edition) {
         this.title = title;
@@ -48,21 +46,12 @@ class Book {
         return edition;
     }
 
-    public int numericValue() {
-
-        char[] name = getTitle().toLowerCase().toCharArray();
-        int asciisum = 0;
-
-        for (char letter : name) {
-            asciisum += (int) letter;
-        }
-        return asciisum;
-    }
 }
 
 class LibrarySystem {
-    private Book[] libraryEntries;
-    private Book[] authors;
+    private Book[] booksByISBN;
+    private Book[] booksByTitles;
+    private Book[] booksByAuthors;
     private Queue<Book> borrowedBooks;
     private int libraryCapacity;
     private int booksInTheLibrary;
@@ -77,16 +66,17 @@ class LibrarySystem {
 
     public LibrarySystem(int libraryCapacity) {
         this.libraryCapacity = libraryCapacity;
-        this.libraryEntries = new Book[libraryCapacity];
+        this.booksByISBN = new Book[libraryCapacity];
+        this.booksByTitles = new Book[libraryCapacity];
+        this.booksByAuthors = new Book[libraryCapacity];
         this.borrowedBooks = new LinkedList<>();
-        this.authors = new Book[libraryCapacity];
         this.booksInTheLibrary = 0;
 
     }
 
     // Return the capacity of the table.
     public int libraryStorageCapacity() {
-        return libraryEntries.length;
+        return booksByISBN.length;
     }
 
     // Return the number of elements in the table.
@@ -110,17 +100,34 @@ class LibrarySystem {
             resizeTheTable();
         }
 
-        int key = book.numericValue();
-        int index = primaryHash(key);
-        int addition = 0;
+        int key1 = book.getIsbn().hashCode();
+        int key2 = book.getAuhor().hashCode();
+        int key3 = book.getTitle().hashCode();
 
-        while (libraryEntries[index] != null) {
-            index = doubleHashing(key, addition);
-            addition++;
+        int index1 = primaryHash(key1);
+        int index2 = primaryHash(key2);
+        int index3 = primaryHash(key3);
+
+        int addition1 = addition2 = addition3 = 0;
+
+        while (booksByISBN[index1] != null) {
+            index = doubleHashing(key1, addition1);
+            addition1++;
         }
 
-        libraryEntries[index] = book;
-        authors[index] = book;
+        while (booksByTitles[index2] != null) {
+            index = doubleHashing(key2, addition2);
+            addition2++;
+        }
+
+        while (booksByAuthors[index3] != null) {
+            index = doubleHashing(key3, addition3);
+            addition3++;
+        }
+
+        booksByISBN[index1] = book;
+        booksByTitles[index2] = book;
+        booksByAuthors[index3] = book;
         booksInTheLibrary++;
 
         return true;
