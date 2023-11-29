@@ -13,7 +13,7 @@
  * - ** Cajetan Songwae
  * - ** Muhammed Habib Soumahoro
  * - *Email:* eddy.kubwimana@ashesi.edu.gh
- * - *Email :
+ * - *Email : cajetan.songwae@ashesi.edu.gh
  * - *Email :
  * - *Email :
  * 
