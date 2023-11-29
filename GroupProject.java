@@ -59,18 +59,7 @@
 
 
 import java.util.*;
-
-<<<<<<< HEAD
-class Book {
-    private String title; // book title
-    private String author; // book author
-    private String publication; // company of publication
-    private String synopsis; //
-    private String isbn;
-    private int edition;
-=======
 public class Book {
->>>>>>> df31bfe7fbb99c26a69e8172a69d466f87e107b1
 
     // Fields
     private String title;        // Book title
