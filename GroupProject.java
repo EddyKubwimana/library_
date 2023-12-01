@@ -1,180 +1,50 @@
-/**
- * Welcome to the Library Management System Project in Java!
- *
- * This project aims to develop a straightforward yet robust in-memory system for managing a library's catalogue. The system
- * facilitates various operations such as adding books, checking them in and out, searching for books, and efficiently
- * managing book availability. Leveraging key data structures, including hash tables, queues, and binary trees, we aim to
- * deliver an organized and user-friendly environment for both library staff and patrons.
- *
- * **Project Collaborators:**
- *
- * - **Eddy Kubwimana
- * - ** Clovis Mushagalusa Cirubakadhera
- * - ** Cajetan Songwae
- * - ** Muhammed Habib Soumahoro
- * - *Email:* eddy.kubwimana@ashesi.edu.gh
- * - *Email : cajetan.songwae@ashesi.edu.gh
- * - *Email :
- * - *Email :
- * 
-
- *   - *GitHub:* https://github.com/EddyKubwimana/Book-catalogue-management
- *
- * - **UI/UX Designer:** Jane Smith
- *   - *Email:* eddy.kubwimana@ashesi.edu.gh
- *
- * **Core Features and Design Choices:**
- *
- * 1. **Catalogue Management:**
- *    - Utilizes a hash table for efficient management of the book catalogue, ensuring quick retrieval of book information.
- *
- * 2. **Checkout System:**
- *    - Implements a queue system to handle book checkouts and returns in a first-come, first-served manner.
- *
- * 3. **Search Functionality:**
- *    - Empowers users to search for books by title, author, or ISBN using efficient search algorithms for a seamless experience.
- *
- * 4. **Book Availability:**
- *    - Utilizes a binary tree to keep track of available and checked-out books, ensuring efficient updates on book status.
- *
- * 5. **User Interface:**
- *    - Provides a simple text-based Command Line Interface (CLI) for users to interact with the library management functionalities.
- *
- * **Expected Outcomes:**
- *
- * - Demonstrates the appropriate use of data structures for efficient book management and user interactions.
- * - Handles book checkouts and availability updates in real-time, providing users with up-to-date information.
- * - Provides comprehensive documentation explaining design choices and complexity analysis for the implemented features.
- *
- * We look forward to the successful development of this Library Management System, contributing to an organized and
- * user-friendly environment for library patrons. For updates and contributions, please refer to the GitHub repository:
- * https://github.com/EddyKubwimana/Book-catalogue-management
- *
- * Thank you for your collaboration and dedication to this project!
- * 
- */
-
-
-
-
-
 import java.util.*;
-public class Book {
 
-    // Fields
-    private String title;        // Book title
-    private String author;       // Book author
-    private String publication;  // Company of publication
-    private String synopsis;     // Book synopsis
-    private String version;      // Edition information (e.g., 1st Edition)
-    private String isbn;         // International Standard Book Number
-    private int edition;         // Edition number
+import javax.print.attribute.standard.MediaSize.ISO;
 
-    /**
-     * Constructs a new `Book` object with the specified attributes.
-     * 
-     * @param title       The title of the book.
-     * @param author      The author of the book.
-     * @param publication The company or entity responsible for publication.
-     * @param synopsis    A brief summary or description of the book.
-     * @param isbn        The International Standard Book Number of the book.
-     */
-    public Book(String title, String author, String publication, String synopsis, String isbn) {
+class Book {
+    private String title; // book title
+    private String author; // book author
+    private String isbn;
+    private int edition;
+
+    public Book(String title, String author, String isbn, int edition) {
         this.title = title;
         this.author = author;
-        this.publication = publication;
-        this.synopsis = synopsis;
         this.isbn = isbn;
+        this.edition = edition;
     }
 
-    /**
-     * Retrieves the title of the book.
-     * 
-     * @return The title of the book.
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Retrieves the author of the book.
-     * 
-     * @return The author of the book.
-     */
     public String getAuthor() {
         return author;
     }
 
-    /**
-     * Retrieves the company of publication for the book.
-     * 
-     * @return The company of publication.
-     */
-    public String getPublication() {
-        return publication;
-    }
-
-    /**
-     * Retrieves a brief summary or description of the book.
-     * 
-     * @return The synopsis of the book.
-     */
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    /**
-     * Retrieves the version (edition) information of the book.
-     * 
-     * @return The version (edition) of the book.
-     */
-    public String getVersion() {
-        return version;
-    }
-
-    /**
-     * Retrieves the International Standard Book Number (ISBN) of the book.
-     * 
-     * @return The ISBN of the book.
-     */
     public String getIsbn() {
         return isbn;
     }
 
-    /**
-     * Retrieves the edition number of the book.
-     * 
-     * @return The edition number of the book.
-     */
     public int getEdition() {
         return edition;
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * Returns a string representation of the book.
-     * 
-     * @return A string containing the book title and author.
-     */
-    @Override
     public String toString() {
-        return "Book Title: " + this.title + ", Author: " + this.author;
+        return ("The book " + getTitle() + " written by " + getAuthor());
     }
->>>>>>> df31bfe7fbb99c26a69e8172a69d466f87e107b1
 }
+
 class LibrarySystem {
-<<<<<<< HEAD
-    private Book[] booksByISBN;
-    private Book[] booksByTitles;
-    private Book[] booksByAuthors;
-=======
-    
->>>>>>> df31bfe7fbb99c26a69e8172a69d466f87e107b1
+    private Book[] titles;
+    private Book[] authors;
+    private Book[] isbns;
     private Queue<Book> borrowedBooks;
     private int libraryCapacity;
     private int booksInTheLibrary;
-    private int borrowed;
+    private int booksBorrowed;
+    private int bookCopies;
     private static final int DEFAULT_CAPACITY = 41;
     private static final double LOAD_FACTOR_THRESHOLD = 0.75;
     private static final int RESIZE = 2;
@@ -184,23 +54,30 @@ class LibrarySystem {
     }
 
     public LibrarySystem(int libraryCapacity) {
+
         this.libraryCapacity = libraryCapacity;
-        this.booksByISBN = new Book[libraryCapacity];
-        this.booksByTitles = new Book[libraryCapacity];
-        this.booksByAuthors = new Book[libraryCapacity];
+        this.titles = new Book[libraryCapacity];
+        this.authors = new Book[libraryCapacity];
+        this.isbns = new Book[libraryCapacity];
         this.borrowedBooks = new LinkedList<>();
         this.booksInTheLibrary = 0;
+        this.booksBorrowed = 0;
 
     }
 
     // Return the capacity of the table.
     public int libraryStorageCapacity() {
-        return booksByISBN.length;
+        return titles.length;
     }
 
     // Return the number of elements in the table.
     public int booksInTheLibrary() {
         return booksInTheLibrary;
+    }
+
+    // Return the number of borrowed books
+    public int booksBorrowed() {
+        return booksBorrowed;
     }
 
     // Checks if the table is empty.
@@ -213,67 +90,80 @@ class LibrarySystem {
     }
 
     // Add Student data entry into the hash table
-    public boolean addBookData(Book book) {
+    public boolean addABook(Book book) {
 
         if (loadFactor() >= LOAD_FACTOR_THRESHOLD) {
-            resizeTheTable();
+            resizeTheLibrary();
         }
 
-        int key1 = book.getIsbn().hashCode();
-        int key2 = book.getAuhor().hashCode();
-        int key3 = book.getTitle().hashCode();
+        int key0 = Math.abs(book.getTitle().hashCode());
+        int key1 = Math.abs(book.getAuthor().hashCode());
+        int key2 = Math.abs(book.getIsbn().hashCode());
 
+        int index0 = primaryHash(key0);
         int index1 = primaryHash(key1);
         int index2 = primaryHash(key2);
-        int index3 = primaryHash(key3);
+        int addition0 = 0;
+        int addition1 = 0;
+        int addition2 = 0;
 
-        int addition1 = addition2 = addition3 = 0;
+        while (titles[index0] != null) {
+            index0 = doubleHashing(key0, addition0);
+            addition0++;
+        }
 
-        while (booksByISBN[index1] != null) {
-            index = doubleHashing(key1, addition1);
+        while (authors[index1] != null) {
+            index1 = doubleHashing(key1, addition1);
             addition1++;
         }
 
-        while (booksByTitles[index2] != null) {
-            index = doubleHashing(key2, addition2);
+        while (isbns[index2] != null) {
+            index2 = doubleHashing(key2, addition2);
             addition2++;
         }
 
-        while (booksByAuthors[index3] != null) {
-            index = doubleHashing(key3, addition3);
-            addition3++;
-        }
-
-        booksByISBN[index1] = book;
-        booksByTitles[index2] = book;
-        booksByAuthors[index3] = book;
+        titles[index0] = book;
+        authors[index1] = book;
+        isbns[index2] = book;
         booksInTheLibrary++;
 
         return true;
     }
 
-    // Delete boo data entry from the hash table.
-    public boolean deleteBookData(Book book) {
-        int key = book.numericValue();
+    // Delete book from the hash table (library).
+    public boolean BorrowABook(Book book) {
+        int key = Math.abs(book.getTitle().hashCode());
         int index = primaryHash(key);
-        int deletion = 0;
+        int deletion0 = 0;
+        int deletion1 = 0;
 
-        while (libraryEntries[index] != null) {
-            if (libraryEntries[index].getKey() == key) {
+        while (titles[index] != null) {
+            if (titles[index].equals(book)) {
                 enqueue(book);
-                libraryEntries[index] = null;
+                titles[index] = null;
                 booksInTheLibrary--;
                 return true;
             }
-            index = doubleHashing(key, deletion);
-            deletion++;
+            index = doubleHashing(key, deletion0);
+            deletion0++;
+        }
+
+        while (authors[index] != null) {
+            if (authors[index].equals(book)) {
+                enqueue(book);
+                authors[index] = null;
+                booksInTheLibrary--;
+                return true;
+            }
+            index = doubleHashing(key, deletion1);
+            deletion1++;
         }
         return false;
     }
 
-    // Retrieve the grade (value) in the hash table.
-    public Book searchBook(Book book) {
-        int key = book.numericValue();
+    // Search the book using its title.
+    public Book searchBookByTitle(String title) {
+        int key = Math.abs(title.hashCode());
         int primaryIndex = primaryHash(key);
         int secondaryIndex = secondaryHash(key);
         int retrieve = 0;
@@ -281,13 +171,37 @@ class LibrarySystem {
         while (retrieve < libraryCapacity) {
             int index = (primaryIndex + retrieve * secondaryIndex) % libraryCapacity;
 
-            if (libraryEntries[index] == null) {
+            if (titles[index] == null) {
                 System.out.println("Key not found!!");
                 return null;
             }
 
-            else if (libraryEntries[index].getKey() == key) {
-                return libraryEntries[index];
+            else if (titles[index].getTitle().equals(title)) {
+                return titles[index];
+            }
+            retrieve++;
+        }
+        System.out.println("Key not found!!");
+        return null;
+    }
+
+    // Search the book using its authors.
+    public Book searchBookByAuthor(String author) {
+        int key = Math.abs(author.hashCode());
+        int primaryIndex = primaryHash(key);
+        int secondaryIndex = secondaryHash(key);
+        int retrieve = 0;
+
+        while (retrieve < libraryCapacity) {
+            int index = (primaryIndex + retrieve * secondaryIndex) % libraryCapacity;
+
+            if (authors[index] == null) {
+                System.out.println("Key not found!!");
+                return null;
+            }
+
+            else if (authors[index].getTitle().equals(author)) {
+                return authors[index];
             }
             retrieve++;
         }
@@ -298,7 +212,7 @@ class LibrarySystem {
     // Add a book to the end of the queue.
     private void enqueue(Book book) {
         borrowedBooks.add(book);
-        borrowed++;
+        booksBorrowed++;
     }
 
     // Primary hash function.
@@ -353,69 +267,304 @@ class LibrarySystem {
     }
 
     // Resizes the hash table and rehash entries.
-    private void resizeTheTable() {
+    private void resizeTheLibrary() {
         int newCapacity = getNextPrime(libraryCapacity * RESIZE);
-        Book[] newTable = new Book[newCapacity];
-        Arrays.fill(newTable, null);
+        Book[] newTitles = new Book[newCapacity];
+        Bokk[] newAuthors = new Book[newCapacity];
+        Book[] newIsbns = new Book[newCapacity];
+        Arrays.fill(newTitles, null);
+        Arrays.fill(newAuthors, null);
+        Arrays.fill(newIsbns, null);
 
-        for (Book entry : libraryEntries) {
-            if (entry != null) {
-                int key = entry.getKey();
-                String value = entry.getValue();
+        for (Book book : titles) {
+            if (book != null) {
+                int key = Math.abs(book.getTitle().hashCode());
                 int newIndex = primaryHash(key);
                 int sizer = 0;
 
-                while (newTable[newIndex] != null) {
+                while (newTitles[newIndex] != null) {
                     newIndex = doubleHashing(key, sizer);
                     sizer++;
                 }
-                newTable[newIndex] = new Entry(key, value);
+                newTitles[newIndex] = book;
             }
         }
-        libraryEntries = newTable;
+
+        for (Book book : authors) {
+            if (book != null) {
+                int key = Math.abs(book.getAuthor().hashCode());
+                int newIndex = primaryHash(key);
+                int sizer = 0;
+
+                while (newAuthors[newIndex] != null) {
+                    newIndex = doubleHashing(key, sizer);
+                    sizer++;
+                }
+                newAuthors[newIndex] = book;
+            }
+        }
+
+        for (Book book : isbns) {
+            if (book != null) {
+                int key = Math.abs(book.getIsbn().hashCode());
+                int newIndex = primaryHash(key);
+                int sizer = 0;
+
+                while (newIsbns[newIndex] != null) {
+                    newIndex = doubleHashing(key, sizer);
+                    sizer++;
+                }
+                newIsbns[newIndex] = book;
+            }
+        }
+        titles = newTitles;
+        authors = newAuthors;
+        isbns = newIsbns;
         libraryCapacity = newCapacity;
+    }
+
+    public Book[] getBooksInLibrary() {
+        Book[] available = new Book[libraryCapacity];
+        for (Book book : titles) {
+            for (int b = 0; b < libraryCapacity; b++) {
+                available[b] = book;
+                available[b].toString();
+            }
+            return available;
+        }
+        return null;
+    }
+
+    public Book[] getBorrowedBooks() {
+        Book[] borrowed = new Book[booksBorrowed];
+
+        for (Book book : borrowedBooks) {
+            for (int b = 0; b < booksBorrowed; b++) {
+                borrowed[b] = book;
+                borrowed[b].toString();
+            }
+            return borrowed;
+        }
+        return null;
     }
 }
 
 public class GroupProject {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Hello");
 
         Book b0, b1, b2, b3, b4, b5, b6, b7, b8, b9;
 
         LibrarySystem library = new LibrarySystem();
 
-        b0 = new Book("book0", "author0", "publication0", "synopsis0", "isbn0", 0);
-        b1 = new Book("book1", "author1", "publication1", "synopsis1", "isbn1", 0);
-        b2 = new Book("book2", "author2", "publication2", "synopsis2", "isbn2", 0);
-        b3 = new Book("book3", "author3", "publication3", "synopsis3", "isbn3", 0);
-        b4 = new Book("book4", "author4", "publication4", "synopsis4", "isbn4", 0);
-        b5 = new Book("book5", "author5", "publication5", "synopsis5", "isbn5", 0);
-        b6 = new Book("book6", "author6", "publication6", "synopsis6", "isbn6", 0);
-        b7 = new Book("book7", "author7", "publication7", "synopsis7", "isbn7", 0);
-        b8 = new Book("book8", "author8", "publication8", "synopsis8", "isbn8", 0);
-        b9 = new Book("book9", "author9", "publication9", "synopsis9", "isbn9", 0);
+        b0 = new Book("book0", "author0", "isbn0", 0);
+        b1 = new Book("book1", "author1", "isbn1", 0);
+        b2 = new Book("book2", "author2", "isbn2", 0);
+        b3 = new Book("book3", "author3", "isbn3", 0);
+        b4 = new Book("book4", "author4", "isbn4", 0);
+        b5 = new Book("book5", "author5", "isbn5", 0);
+        b6 = new Book("book6", "author6", "isbn6", 0);
+        b7 = new Book("book7", "author7", "isbn7", 0);
+        b8 = new Book("book8", "author8", "isbn8", 0);
+        b9 = new Book("book9", "author9", "isbn9", 0);
 
-        library.addBookData(b0);
-        library.addBookData(b1);
-        library.addBookData(b2);
-        library.addBookData(b3);
-        library.addBookData(b4);
-        library.addBookData(b5);
-        library.addBookData(b6);
-        library.addBookData(b7);
-        library.addBookData(b8);
-        library.addBookData(b9);
+        library.addABook(b0);
+        library.addABook(b1);
+        library.addABook(b2);
+        library.addABook(b3);
+        library.addABook(b4);
+        library.addABook(b5);
+        library.addABook(b6);
+        library.addABook(b7);
+        library.addABook(b8);
+        library.addABook(b9);
 
-        System.out.println(library.booksInTheLibrary());
+        // Menu-driven interface for the task management system
+        while (true) {
+            System.out.println();
+            System.out.println("Library Management System Menu:");
+            System.out.println();
+            System.out.println("1. Add a book in the library.");
+            System.out.println("2. Borrow a book.");
+            System.out.println("3. Search a book.");
+            System.out.println("4. View all the books in the library.");
+            System.out.println("5. View all borrowed books.");
+            System.out.println("6. Find the number of books in the library.");
+            System.out.println("7. Find the number of books borrowed.");
+            System.out.println("8. Quit!");
+            System.out.println();
+            System.out.print("Enter your choice: ");
 
-        library.deleteBookData(b3);
-        library.deleteBookData(b5);
-        library.deleteBookData(b7);
-        library.deleteBookData(b9);
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.println();
 
-        System.out.println(library.booksInTheLibrary());
+            // Switch case to handle user input and perform corresponding actions
+            switch (choice) {
+                case 1:
+                    while (true) {
+                        System.out.println("Are you going to use an 'object' or 'attributes'?");
+                        System.out.println("1. I am using object.");
+                        System.out.println("2. I am using attributes.");
+                        System.out.println();
+                        System.out.print("Type your choice here: ");
 
-        System.out.println(library.searchBook(b0));
+                        int userFeedback = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.println();
+
+                        switch (userFeedback) {
+                            case 1:
+                                System.out.println("Type the book object.");
+                                System.out.print("Type it here: ");
+                                String user = scanner.nextLine();
+                                System.out.println("We will fix it" + user);
+                                // Book aBook = scanner.next();
+                                // library.addABook(aBook);
+                                break;
+                            case 2:
+                                System.out.print("Type the book's title: ");
+                                String addTitle = scanner.nextLine();
+
+                                System.out.print("Type the author's name: ");
+                                String addAuthor = scanner.nextLine();
+
+                                System.out.print("Type the isbn: ");
+                                String addIsbn = scanner.nextLine();
+
+                                System.out.print("Type the book's edition: ");
+                                int addEdition = scanner.nextInt();
+
+                                scanner.nextLine(); // Consume newline
+                                Book addBook = new Book(addTitle, addAuthor, addIsbn, addEdition);
+                                library.addABook(addBook);
+                                break;
+                            default:
+                                System.out.println("Invalid choice. Please try again.");
+                        }
+                    }
+
+                case 2:
+                    while (true) {
+                        System.out.println("Are you going to use an 'object' or 'attributes'?");
+                        System.out.println("1. I am using object.");
+                        System.out.println("2. I am using attributes.");
+                        System.out.println();
+                        System.out.print("Type your choice here: ");
+
+                        int userFeedback = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.println();
+
+                        switch (userFeedback) {
+                            case 1:
+                                System.out.println("Type the book object.");
+                                System.out.print("Type it here: ");
+                                String user = scanner.nextLine();
+                                System.out.println("We will fix it" + user);
+                                // Book bBook = scanner.next();
+                                // library.BorrowABook(bBook);
+                                break;
+                            case 2:
+                                System.out.println("Enter the details of the book.");
+                                System.out.println();
+                                System.out.print("Type the book's title: ");
+                                String borrowTitle = scanner.nextLine();
+
+                                System.out.print("Type the author's name: ");
+                                String borrowAuthor = scanner.nextLine();
+
+                                System.out.print("Type the isbn: ");
+                                String borrowIsbn = scanner.nextLine();
+
+                                System.out.print("Type the book's edition: ");
+                                int borrowEdition = scanner.nextInt();
+
+                                scanner.nextLine(); // Consume newline
+                                Book borrowBook = new Book(borrowTitle, borrowAuthor, borrowIsbn, borrowEdition);
+                                library.BorrowABook(borrowBook);
+                                break;
+                            default:
+                                System.out.println("Invalid choice. Please try again.");
+                        }
+                    }
+
+                case 3:
+                    while (true) {
+                        System.out.println("What do you want to you for search the book?");
+                        System.out.println("1. Book title.");
+                        System.out.println("2. Book author.");
+                        System.out.println("3. Book isbn.");
+                        System.out.println();
+
+                        System.out.print("Type your choice here: ");
+
+                        int userFeedback = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.println();
+
+                        switch (userFeedback) {
+                            case 1:
+                                System.out.println("Enter the book title here: ");
+                                String btitle = scanner.nextLine();
+                                library.searchBookByTitle(btitle);
+                                break;
+                            case 2:
+                                System.out.println("Enter the book author here: ");
+                                String bauthor = scanner.nextLine();
+                                library.searchBookByTitle(bauthor);
+                                break;
+                            case 3:
+                                System.out.println("Enter the book isbn here: ");
+                                String bisbn = scanner.nextLine();
+                                library.searchBookByTitle(bisbn);
+                                break;
+                            default:
+                                System.out.println("Invalid choice. Please try again.");
+                        }
+                    }
+                case 4:
+                    System.out.println("The books available in the library.");
+                    library.getBooksInLibrary();
+                    break;
+                case 5:
+                    System.out.println("The books borrowed.");
+                    library.getBorrowedBooks();
+                    break;
+                case 6:
+                    int numberOfBooks = library.booksInTheLibrary();
+                    System.out.println("There are " + numberOfBooks + " books in the library.");
+                    break;
+                case 7:
+                    int borrowedbooks = library.booksBorrowed();
+                    System.out.println(borrowedbooks + " from our library are borrowed.");
+                    break;
+                case 8:
+                    System.out.println("Exiting Library Management System. Goodbye!");
+                    System.exit(0); // Exits the program
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+        // System.out.println(library.booksInTheLibrary());
+
+        // library.BorrowABook(b3);
+        // library.BorrowABook(b5);
+        // library.BorrowABook(b7);
+        // library.BorrowABook(b9);
+
+        // System.out.println(library.booksInTheLibrary());
+
+        // System.out.println(library.searchBookByTitle("book0").getAuthor());
+
+        // Book[] books = library.getBorrowedBooks();
+
+        // System.out.println(books.length);
+
+        // for (Book book : books) {
+        // System.out.println(book.getAuthor());
+        // }
     }
 }
